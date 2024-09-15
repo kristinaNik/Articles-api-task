@@ -28,32 +28,33 @@ class ArticlesController extends Controller
 	{
 		$query = Article::query();
 
-		if ($request->has('title')) {
-			$query->where('title', 'like', '%' . $request->input('title') . '%');
+		if ($request->filled('title')) {
+			$query->title($request->input('title'));
 		}
 
-		if ($request->has('description')) {
-			$query->where('description', 'like', '%' . $request->input('description') . '%');
+		if ($request->filled('description')) {
+			$query->description($request->input('description'));
 		}
 
-		if ($request->has('source')) {
-			$query->where('source', $request->input('source'));
+		if ($request->filled('source')) {
+			$query->source($request->input('source'));
 		}
 
-		if ($request->has('author')) {
-			$query->where('author', 'like', '%' . $request->input('author') . '%');
+		if ($request->filled('author')) {
+			$query->author($request->input('author'));
 		}
 
-		if ($request->has('published_at')) {
-			$query->whereDate('published_at', $request->input('published_at'));
+		if ($request->filled('published_at')) {
+			$query->publishedAt($request->input('published_at'));
 		}
 
-		$articles = $query->get();
+		// Paginate results
+		$articles = $query->paginate(10);
 
 		return response()->json(ArticleResource::collection($articles));
 	}
 
-	public function store(StoreArticlesRequest $request): JsonResponse
+	public function store(): JsonResponse
 	{
 		$articles = $this->articleService->fetchArticles();
 		$this->articleService->storeArticles($articles);
