@@ -13,6 +13,7 @@ class ArticleMapper
 				'title' => $article['webTitle'],
 				'description' => $article['fields']['trailText'] ?? 'No description available.',
 				'source' => 'The Guardian',
+				'category' => $article['sectionName'],
 				'author' => $article['fields']['byline'] ?? 'Unknown',
 				'url' => $article['webUrl'],
 				'published_at' => Carbon::parse($article['webPublicationDate'])->format('Y-m-d H:i:s'),
@@ -33,6 +34,7 @@ class ArticleMapper
 				'title' => $article['headline']['main'],
 				'description' => $article['abstract'] ?? 'No description available.',
 				'source' => 'The New York Times',
+				'category' => $article['section'] ?? 'General',
 				'author' => $authors,
 				'url' => $article['web_url'],
 				'published_at' =>  isset($article['pub_date'])
