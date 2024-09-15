@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PaginatedArticleResource;
+use App\Services\CacheKeyService;
+use App\Services\PaginationService;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreArticlesRequest;
 use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use App\Services\ArticleServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class ArticlesController extends Controller
 {
-	public function __construct(private ArticleServiceInterface $articleService) {
+	public function __construct(
+		private ArticleServiceInterface $articleService,
+		private PaginationService $paginationService,
+		private CacheKeyService $cacheKeyService
+	)
+	{
 
 	}
 
@@ -24,34 +32,49 @@ class ArticlesController extends Controller
 		return response()->json(ArticleResource::collection($articles));
 	}
 
-	public function search(Request $request)
+	public function search(Request $request): JsonResponse
 	{
-		$query = Article::query();
+		$perPage = $request->input('per_page', 10);
+		$cacheKey = $this->cacheKeyService->generateCacheKey($request, $perPage);
 
-		if ($request->filled('title')) {
-			$query->title($request->input('title'));
-		}
+		// Try to fetch the cached result
+		$articles = Cache::remember($cacheKey, now()->addMinutes(30), function () use ($request, $perPage) {
+			$query = Article::query();
 
-		if ($request->filled('description')) {
-			$query->description($request->input('description'));
-		}
+			// Apply scopes based on request parameters
+			if ($request->filled('title')) {
+				$query->title($request->input('title'));
+			}
 
-		if ($request->filled('source')) {
-			$query->source($request->input('source'));
-		}
+			if ($request->filled('description')) {
+				$query->description($request->input('description'));
+			}
 
-		if ($request->filled('author')) {
-			$query->author($request->input('author'));
-		}
+			if ($request->filled('source')) {
+				$query->source($request->input('source'));
+			}
 
-		if ($request->filled('published_at')) {
-			$query->publishedAt($request->input('published_at'));
-		}
+			if ($request->filled('category')) {
+				$query->category($request->input('category'));
+			}
 
-		// Paginate results
-		$articles = $query->paginate(10);
+			if ($request->filled('author')) {
+				$query->author($request->input('author'));
+			}
 
-		return response()->json(ArticleResource::collection($articles));
+			if ($request->filled('published_at')) {
+				$query->publishedAt($request->input('published_at'));
+			}
+
+			return $query->paginate($perPage);
+		});
+
+		$pagination = $this->paginationService->generatePaginationData($articles);
+
+		return response()->json(new PaginatedArticleResource([
+			'data' => $articles,
+			'pagination' => $pagination,
+		]));
 	}
 
 	public function store(): JsonResponse
@@ -61,4 +84,6 @@ class ArticlesController extends Controller
 
 		return response()->json(['message' => 'Articles fetched and stored successfully!']);
 	}
+
+
 }

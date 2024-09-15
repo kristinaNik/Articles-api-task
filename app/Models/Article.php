@@ -38,6 +38,11 @@ class Article extends Model
 		return $query->where('source', $source);
 	}
 
+	public function scopeCategory($query, $category)
+	{
+		return $query->where('category', $category);
+	}
+
 	public function scopeAuthor($query, $author)
 	{
 		return $query->where('author', 'like', '%' . $author . '%');
