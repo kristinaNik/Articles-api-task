@@ -22,8 +22,25 @@ class ArticleMapper
 		}, $articles);
 	}
 
-	public function mapNewYorkTimesArticles(): array
+	public function mapNewYorkTimesArticles(array $articles): array
 	{
-		//todo
+		return array_map(function ($article) {
+			$authors = isset($article['byline']['person']) && is_array($article['byline']['person'])
+				? implode(', ', array_column($article['byline']['person'], 'name'))
+				: 'Unknown';
+
+			return [
+				'title' => $article['headline']['main'],
+				'description' => $article['abstract'] ?? 'No description available.',
+				'source' => 'The New York Times',
+				'author' => $authors,
+				'url' => $article['web_url'],
+				'published_at' =>  isset($article['pub_date'])
+					? Carbon::parse($article['pub_date'])->format('Y-m-d H:i:s')
+					: null,
+				'created_at' => now(),
+				'updated_at' => now(),
+			];
+		}, $articles);
 	}
 }
