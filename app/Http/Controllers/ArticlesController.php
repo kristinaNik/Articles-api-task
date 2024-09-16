@@ -27,9 +27,6 @@ class ArticlesController extends Controller
 
 	}
 
-	/**
-	 * Display a list of all articles.
-	 */
 	public function index(): Response
 	{
 		$articles = Article::paginate(10);
@@ -45,6 +42,19 @@ class ArticlesController extends Controller
 			'data' => $articles,
 			'pagination' => $pagination,
 		]), 200);
+	}
+
+	public function show(int $id): Response
+	{
+		$article = Article::find($id);
+
+		if (!$article) {
+			return response([
+				'message' => 'Article not found.',
+			], 404);
+		}
+
+		return response(new ArticleResource($article), 200);
 	}
 
 	public function store(): Response
