@@ -41,6 +41,7 @@ class GuardianArticleServiceTest extends TestCase
 		]);
 
 		$articles = $this->service->fetchArticles();
+
 		$this->assertCount(2, $articles);
 		$this->assertEquals('http://example.com/1', $articles[0]['webUrl']);
 		$this->assertEquals('http://example.com/2', $articles[1]['webUrl']);

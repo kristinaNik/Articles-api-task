@@ -14,13 +14,14 @@ class ArticleUrlExtractor implements ArticleUrlExctractorInterface
 			if (isset($article['webUrl'])) {
 				$urls[] = $article['webUrl'];
 			}
-
 			elseif (isset($article['web_url'])) {
 				$urls[] = $article['web_url'];
+			}
+			elseif (isset($article['url'])) {
+				$urls[] = $article['url'];
 			}
 		}
 
 		return $urls;
 	}
-
 }

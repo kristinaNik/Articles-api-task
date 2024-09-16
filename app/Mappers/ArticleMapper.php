@@ -26,19 +26,33 @@ class ArticleMapper
 	public function mapNewYorkTimesArticles(array $articles): array
 	{
 		return array_map(function ($article) {
-			$authors = isset($article['byline']['person']) && is_array($article['byline']['person'])
-				? implode(', ', array_column($article['byline']['person'], 'name'))
-				: 'Unknown';
-
 			return [
 				'title' => $article['headline']['main'],
 				'description' => $article['abstract'] ?? 'No description available.',
 				'source' => 'The New York Times',
-				'category' => $article['section'] ?? 'General',
-				'author' => $authors,
+				'category' => $article['section_name'] ?? 'General',
+				'author' => $article['byline']['original'] ?? 'Unknown',
 				'url' => $article['web_url'],
 				'published_at' =>  isset($article['pub_date'])
 					? Carbon::parse($article['pub_date'])->format('Y-m-d H:i:s')
+					: null,
+				'created_at' => now(),
+				'updated_at' => now(),
+			];
+		}, $articles);
+	}
+
+	public function mapNewsApiArticles(array $articles): array
+	{
+		return array_map(function ($article) {
+			return [
+				'url' => $article['url'],
+				'title' => $article['title'],
+				'description' => $article['description'] ?? 'No description available.',
+				'source' => $article['source']['name'] ?? 'Unknown',
+				'author' => $article['author'] ?? 'no author',
+				'published_at' =>  isset($article['publishedAt'])
+					?  Carbon::parse($article['publishedAt'])->format('Y-m-d H:i:s')
 					: null,
 				'created_at' => now(),
 				'updated_at' => now(),

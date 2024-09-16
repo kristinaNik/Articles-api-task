@@ -9,6 +9,7 @@ use App\Services\ArticleServiceInterface;
 use App\Services\ArticleUrlExctractorInterface;
 use App\Services\ArticleUrlExtractor;
 use App\Services\GuardianArticleService;
+use App\Services\NewsApiArticleService;
 use App\Services\NewYorkTimesArticleService;
 use App\Services\PaginationService;
 use App\Services\PaginationServiceInterface;
@@ -42,7 +43,10 @@ class AppServiceProvider extends ServiceProvider
 			$this->app->bind(ArticleServiceInterface::class, GuardianArticleService::class);
 		} elseif ($service === 'new_york_times') {
 			$this->app->bind(ArticleServiceInterface::class, NewYorkTimesArticleService::class);
-		} else {
+		} elseif ($service === 'news') {
+			$this->app->bind(ArticleServiceInterface::class, NewsApiArticleService::class);
+		}
+		else {
 			throw new \Exception("Unsupported article service: $service");
 		}
     }
