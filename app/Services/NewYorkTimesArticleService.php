@@ -21,7 +21,7 @@ class NewYorkTimesArticleService implements ArticleServiceInterface
 
 	public function fetchArticles(): array
 	{
-		$response = Http::get('https://api.nytimes.com/svc/search/v2/articlesearch.json', [
+		$response = Http::get(env('NEW_YORK_API_URL'), [
 			'api-key' => $this->apiKey,
 			'q' => 'latest',
 			'sort' => 'newest',

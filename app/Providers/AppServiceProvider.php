@@ -8,7 +8,6 @@ use App\Services\ArticleSearchServiceInterface;
 use App\Services\ArticleServiceInterface;
 use App\Services\ArticleUrlExctractorInterface;
 use App\Services\ArticleUrlExtractor;
-use App\Services\CacheKeyService;
 use App\Services\GuardianArticleService;
 use App\Services\NewYorkTimesArticleService;
 use App\Services\PaginationService;

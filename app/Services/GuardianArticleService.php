@@ -19,7 +19,6 @@ class GuardianArticleService implements ArticleServiceInterface
 		$this->apiKey = env('GUARDIAN_API_KEY');
 		$this->articleMapper = $articleMapper;
 	}
-
 	public function fetchArticles(): array
 	{
 		$response = Http::get(env('GUARDIAN_API_URL'), [
