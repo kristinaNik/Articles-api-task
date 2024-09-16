@@ -81,5 +81,4 @@ class ArticlesController extends Controller
 			], 500);
 		}
 	}
-
 }
