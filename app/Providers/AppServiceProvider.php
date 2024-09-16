@@ -16,10 +16,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-		$this->app->singleton(CacheKeyService::class, function () {
-			return new CacheKeyService();
-		});
-
 		$this->app->singleton(ArticleMapper::class);
 
 		// Determine which service to bind based on configuration
