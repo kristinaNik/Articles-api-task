@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Resources\PaginatedArticleResource;
-use App\Services\CacheKeyService;
 use App\Services\PaginationService;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use App\Services\ArticleServiceInterface;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 class ArticlesController extends Controller
@@ -24,13 +23,13 @@ class ArticlesController extends Controller
 
 	}
 
-	public function index(): JsonResponse
+	public function index(): Response
 	{
 		$articles = Article::all();
-		return response()->json(ArticleResource::collection($articles));
+		return response(ArticleResource::collection($articles), 200);
 	}
 
-	public function search(Request $request): JsonResponse
+	public function search(Request $request): Response
 	{
 		$perPage = $request->input('per_page', 10);
 		$query = Article::query();
@@ -62,18 +61,27 @@ class ArticlesController extends Controller
 		$articles = $query->paginate($perPage);
 		$pagination = $this->paginationService->generatePaginationData($articles);
 
-		return response()->json(new PaginatedArticleResource([
+		return response(new PaginatedArticleResource([
 			'data' => $articles,
 			'pagination' => $pagination,
-		]));
+		]), 200);
 	}
 
-	public function store(): JsonResponse
+	public function store(): Response
 	{
-		$articles = $this->articleService->fetchArticles();
-		$this->articleService->storeArticles($articles);
+		$articlesData = $this->articleService->fetchArticles();
+		$this->articleService->storeArticles($articlesData);
 
-		return response()->json(['message' => 'Articles fetched and stored successfully!']);
+		// Fetch the newly stored articles from the database using their URLs
+		$storedArticleUrls = array_column($articlesData, 'webUrl');
+
+		// Retrieve stored articles from the database based on the URLs
+		$storedArticles = Article::whereIn('url', $storedArticleUrls)->get();
+
+		return response([
+			'message' => 'Articles fetched and stored successfully!',
+			'data' => ArticleResource::collection($storedArticles),
+		], 201);
 	}
 
 
