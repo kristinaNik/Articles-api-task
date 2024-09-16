@@ -6,7 +6,7 @@ namespace App\Services;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PaginationService
+class PaginationService implements PaginationServiceInterface
 {
 	public function generatePaginationData(LengthAwarePaginator $paginator): array
 	{
