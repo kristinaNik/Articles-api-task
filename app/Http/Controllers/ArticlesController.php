@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PaginatedArticleResource;
 use App\Services\ArticleSearchServiceInterface;
 use App\Services\ArticleUrlExctractorInterface;
-use App\Services\PaginationService;
 use App\Services\PaginationServiceInterface;
 use Illuminate\Http\Request;
 use App\Http\Resources\ArticleResource;
