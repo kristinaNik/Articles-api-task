@@ -10,12 +10,6 @@ use Illuminate\Support\Facades\URL;
 
 class PaginationService implements PaginationServiceInterface
 {
-	/**
-	 * Generate pagination data from a LengthAwarePaginator instance.
-	 *
-	 * @param LengthAwarePaginator $paginator
-	 * @return array
-	 */
 	public function generatePaginationData(LengthAwarePaginator $paginator): array
 	{
 		return [
@@ -24,12 +18,6 @@ class PaginationService implements PaginationServiceInterface
 		];
 	}
 
-	/**
-	 * Get pagination links.
-	 *
-	 * @param LengthAwarePaginator $paginator
-	 * @return array
-	 */
 	private function getPaginationLinks(LengthAwarePaginator $paginator): array
 	{
 		return [
@@ -40,12 +28,6 @@ class PaginationService implements PaginationServiceInterface
 		];
 	}
 
-	/**
-	 * Get pagination meta data.
-	 *
-	 * @param LengthAwarePaginator $paginator
-	 * @return array
-	 */
 	private function getPaginationMeta(LengthAwarePaginator $paginator): array
 	{
 		return [
@@ -62,12 +44,6 @@ class PaginationService implements PaginationServiceInterface
 		];
 	}
 
-	/**
-	 * Get pagination link labels.
-	 *
-	 * @param LengthAwarePaginator $paginator
-	 * @return array
-	 */
 	private function getPaginationLinkLabels(LengthAwarePaginator $paginator): array
 	{
 		return [
