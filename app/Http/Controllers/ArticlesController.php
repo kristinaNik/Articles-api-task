@@ -40,7 +40,6 @@ class ArticlesController extends Controller
 			$articles = Article::paginate(10);
 		}
 
-		// Prepare pagination data
 		$pagination = $hasFilters
 			? $this->paginationService->generatePaginationData($articles)
 			: [

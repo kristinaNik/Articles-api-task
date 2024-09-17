@@ -36,15 +36,10 @@ class GuardianArticleService implements ArticleServiceInterface
 
 	public function storeArticles(array $articles): void
 	{
-		$preparedArticles = $this->articleMapper->mapGuardianArticles($articles);
+		$articles = $this->articleMapper->mapGuardianArticles($articles);
 
-		foreach (array_chunk($preparedArticles, 100) as $chunk) {
-			foreach ($chunk as $article) {
-				Article::updateOrCreate(
-					['url' => $article['url']],
-					$article
-				);
-			}
+		foreach ($articles as $article) {
+			$article->save();
 		}
 	}
 }
