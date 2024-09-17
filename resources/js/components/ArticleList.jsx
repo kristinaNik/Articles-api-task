@@ -32,7 +32,7 @@ function ArticleList({ searchCriteria }) {
     };
 
     useEffect(() => {
-        fetchArticles(); // Initial fetch
+        fetchArticles();
     }, [searchCriteria]);
 
     const handlePageChange = (page) => {

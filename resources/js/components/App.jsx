@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ArticleList from '../components/ArticleList';
 import Search from '../components/Search';
 
-
 function App() {
     const [searchCriteria, setSearchCriteria] = useState({});
 

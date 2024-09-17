@@ -14,6 +14,7 @@ class ArticleSearchService implements ArticleSearchServiceInterface
 	{
 		$query = Article::query();
 
+		// Apply filters
 		if (!empty($filters['title'])) {
 			$query->where('title', 'like', '%' . $filters['title'] . '%');
 		}
@@ -27,18 +28,15 @@ class ArticleSearchService implements ArticleSearchServiceInterface
 		}
 
 		if (!empty($filters['source'])) {
-			$query->where('source','like', '%' . $filters['source'] . '%');
+			$query->where('source', 'like', '%' . $filters['source'] . '%');
 		}
 
-		// Date filtering
 		if (!empty($filters['published_at_from'])) {
-			$fromDate = $filters['published_at_from'];
-			$query->whereDate('published_at', '>=', $fromDate);
+			$query->whereDate('published_at', '>=', $filters['published_at_from']);
 		}
 
 		if (!empty($filters['published_at_to'])) {
-			$toDate = $filters['published_at_to'];
-			$query->whereDate('published_at', '<=', $toDate);
+			$query->whereDate('published_at', '<=', $filters['published_at_to']);
 		}
 
 		return $query->paginate(10);
