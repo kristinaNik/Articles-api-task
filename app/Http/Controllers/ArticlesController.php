@@ -27,7 +27,7 @@ class ArticlesController extends Controller
 
 	public function index(Request $request): Response
 	{
-		$filters = $request->only(['title', 'author', 'category', 'source']);
+		$filters = $request->only(['title', 'author', 'category', 'source', 'published_at']);
 
 		// Determine if filters are applied
 		$hasFilters = !empty(array_filter($filters));

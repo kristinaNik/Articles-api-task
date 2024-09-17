@@ -4,15 +4,19 @@ function Search({ onSearch }) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [category, setCategory] = useState('');
+    const [source, setSource] = useState('');
+    const [publishedAt, setPublishedAt] = useState('');
 
     const handleSearch = () => {
-        onSearch({ title, author, category });
+        onSearch({ title, author, category, source, published_at: publishedAt });
     };
 
     const handleReset = () => {
         setTitle('');
         setAuthor('');
         setCategory('');
+        setSource('');
+        setPublishedAt('');
         onSearch({});
     };
 
@@ -43,6 +47,24 @@ function Search({ onSearch }) {
                     type="text"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <label>Source:</label>
+                <input
+                    type="text"
+                    value={source}
+                    onChange={(e) => setSource(e.target.value)}
+                    className="form-control"
+                />
+            </div>
+            <div className="form-group">
+                <label>Published Date:</label>
+                <input
+                    type="date"
+                    value={publishedAt}
+                    onChange={(e) => setPublishedAt(e.target.value)}
                     className="form-control"
                 />
             </div>

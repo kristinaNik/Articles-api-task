@@ -30,6 +30,10 @@ class ArticleSearchService implements ArticleSearchServiceInterface
 			$query->where('source','like', '%' . $filters['source'] . '%');
 		}
 
+		if (!empty($filters['published_by'])) {
+			$query->whereDate('published_at', $filters['published_by']);
+		}
+
 		return $query->paginate(10);
 	}
 }

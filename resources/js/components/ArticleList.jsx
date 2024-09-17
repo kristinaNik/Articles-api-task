@@ -32,7 +32,7 @@ function ArticleList({ searchCriteria }) {
     };
 
     useEffect(() => {
-        fetchArticles();
+        fetchArticles(); // Initial fetch
     }, [searchCriteria]);
 
     const handlePageChange = (page) => {
@@ -85,4 +85,5 @@ function ArticleList({ searchCriteria }) {
         </div>
     );
 }
+
 export default ArticleList;
