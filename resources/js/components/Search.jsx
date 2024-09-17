@@ -1,14 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Search({ onSearch }) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [category, setCategory] = useState('');
     const [source, setSource] = useState('');
-    const [publishedAt, setPublishedAt] = useState('');
+    const [sources, setSources] = useState([]);
+
+    useEffect(() => {
+        const fetchSources = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/articles/source');
+                setSources(response.data.source); // Use the "source" key
+            } catch (error) {
+                console.error('Error fetching sources:', error);
+            }
+        };
+
+        fetchSources();
+    }, []);
 
     const handleSearch = () => {
-        onSearch({ title, author, category, source, published_at: publishedAt });
+        onSearch({ title, author, category, source });
     };
 
     const handleReset = () => {
@@ -16,7 +30,6 @@ function Search({ onSearch }) {
         setAuthor('');
         setCategory('');
         setSource('');
-        setPublishedAt('');
         onSearch({});
     };
 
@@ -52,21 +65,18 @@ function Search({ onSearch }) {
             </div>
             <div className="form-group">
                 <label>Source:</label>
-                <input
-                    type="text"
+                <select
                     value={source}
                     onChange={(e) => setSource(e.target.value)}
                     className="form-control"
-                />
-            </div>
-            <div className="form-group">
-                <label>Published Date:</label>
-                <input
-                    type="date"
-                    value={publishedAt}
-                    onChange={(e) => setPublishedAt(e.target.value)}
-                    className="form-control"
-                />
+                >
+                    <option value="">All Sources</option>
+                    {sources.map((src, index) => (
+                        <option key={index} value={src}>
+                            {src}
+                        </option>
+                    ))}
+                </select>
             </div>
             <button onClick={handleSearch} className="btn btn-primary">
                 Search

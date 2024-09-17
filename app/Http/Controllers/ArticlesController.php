@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ArticleResource;
+use App\Http\Resources\ArticleSourceResource;
 use App\Http\Resources\PaginatedArticleResource;
 use App\Models\Article;
 use App\Services\Interfaces\ArticleSearchServiceInterface;
@@ -14,6 +15,7 @@ use App\Services\Interfaces\PaginationServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class ArticlesController extends Controller
 {
@@ -50,6 +52,13 @@ class ArticlesController extends Controller
 			'data' => $hasFilters ? $articles : $articles->items(),
 			'pagination' => $pagination,
 		]), 200);
+	}
+
+	public function getSources(): Response
+	{
+		$sources = DB::table('articles')->distinct()->pluck('source');
+
+		return response(new ArticleSourceResource($sources), 200);
 	}
 
 	public function show(int $id): Response
