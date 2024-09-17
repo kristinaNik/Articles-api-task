@@ -1,84 +1,57 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
-function Search() {
+function Search({ onSearch }) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [category, setCategory] = useState('');
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
-    const handleSearch = async () => {
-        // Clear previous results before performing a new search
-        setResults([]);
-        setLoading(true);
-        setError(null);
+    const handleSearch = () => {
+        onSearch({ title, author, category });
+    };
 
-        try {
-            const response = await axios.get(`http://localhost:8000/api/articles/search`, {
-                params: {
-                    title: title.trim(),
-                    author: author.trim(),
-                    category: category.trim(),
-                },
-            });
-            setResults(response.data.data);  // Update results with new data
-        } catch (error) {
-            setError('Search failed. Please try again.');
-        } finally {
-            setLoading(false);
-        }
+    const handleReset = () => {
+        setTitle('');
+        setAuthor('');
+        setCategory('');
+        onSearch({});
     };
 
     return (
-        <div>
+        <div className="search-form">
             <h2>Search Articles</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px', margin: 'auto' }}>
+            <div className="form-group">
+                <label>Title:</label>
                 <input
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Search by title"
-                    style={{ padding: '10px', fontSize: '16px' }}
+                    className="form-control"
                 />
+            </div>
+            <div className="form-group">
+                <label>Author:</label>
                 <input
                     type="text"
                     value={author}
                     onChange={(e) => setAuthor(e.target.value)}
-                    placeholder="Search by author"
-                    style={{ padding: '10px', fontSize: '16px' }}
+                    className="form-control"
                 />
+            </div>
+            <div className="form-group">
+                <label>Category:</label>
                 <input
                     type="text"
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    placeholder="Search by category"
-                    style={{ padding: '10px', fontSize: '16px' }}
+                    className="form-control"
                 />
-                <button onClick={handleSearch} style={{ padding: '10px', fontSize: '16px' }}>
-                    Search
-                </button>
             </div>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-
-            <ul style={{ marginTop: '20px' }}>
-                {results.length > 0 ? (
-                    results.map(article => (
-                        <li key={article.id} style={{ marginBottom: '20px' }}>
-                            <a href={`/articles/${article.id}`} style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                                {article.title}
-                            </a>
-                            <p>Author: {article.author || 'Unknown'}</p>
-                            <p>Category: {article.category || 'Uncategorized'}</p>
-                        </li>
-                    ))
-                ) : (
-                    <p>No articles found.</p>
-                )}
-            </ul>
+            <button onClick={handleSearch} className="btn btn-primary">
+                Search
+            </button>
+            <button onClick={handleReset} className="btn btn-secondary ml-2">
+                Reset
+            </button>
         </div>
     );
 }

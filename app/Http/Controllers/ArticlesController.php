@@ -27,15 +27,14 @@ class ArticlesController extends Controller
 
 	}
 
-	public function index(): Response
+	public function index(Request $request): Response
 	{
-		$articles = Article::paginate(10);
-		return response(ArticleResource::collection($articles), 200);
-	}
+		if ($request->has('title') || $request->has('author') || $request->has('category')) {
+			$articles = $this->articleSearchService->searchArticlesWithFilters($request);
+		} else {
+			$articles = Article::paginate(10);
+		}
 
-	public function search(Request $request): Response
-	{
-		$articles = $this->articleSearchService->searchArticlesWithFilters($request);
 		$pagination = $this->paginationService->generatePaginationData($articles);
 
 		return response(new PaginatedArticleResource([
