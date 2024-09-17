@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Mappers\ArticleMapper;
+use App\Repository\ArticlesRepository;
+use App\Repository\ArticlesRepositoryInterface;
 use App\Services\ArticleSearchService;
 use App\Services\ArticleUrlExtractor;
 use App\Services\GuardianArticleService;
@@ -33,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
 		$this->app->singleton(PaginationServiceInterface::class, function () {
 			return new PaginationService();
 		});
+
+		$this->app->bind(ArticlesRepositoryInterface::class, ArticlesRepository::class);
 
 		$this->app->singleton(ArticleMapper::class);
 

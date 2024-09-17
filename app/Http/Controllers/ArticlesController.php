@@ -8,6 +8,8 @@ use App\Http\Resources\ArticleResource;
 use App\Http\Resources\ArticleSourceResource;
 use App\Http\Resources\PaginatedArticleResource;
 use App\Models\Article;
+use App\Repository\ArticlesRepository;
+use App\Repository\ArticlesRepositoryInterface;
 use App\Services\Interfaces\ArticleSearchServiceInterface;
 use App\Services\Interfaces\ArticleServiceInterface;
 use App\Services\Interfaces\ArticleUrlExctractorInterface;
@@ -22,6 +24,7 @@ class ArticlesController extends Controller
 		private ArticleServiceInterface $articleService,
 		private ArticleSearchServiceInterface $articleSearchService,
 		private ArticleUrlExctractorInterface $articleUrlExtractor,
+		private ArticlesRepositoryInterface $articlesRepository
 	)
 	{}
 
@@ -60,7 +63,7 @@ class ArticlesController extends Controller
 			$this->articleService->storeArticles($articlesData);
 
 			$storedArticleUrls = $this->articleUrlExtractor->extractArticleUrls($articlesData);
-			$storedArticles = Article::whereIn('url', $storedArticleUrls)->get();
+			$storedArticles = $this->articlesRepository->getArticlesByUrls($storedArticleUrls);
 
 			return response([
 				'message' => 'Articles fetched and stored successfully!',
