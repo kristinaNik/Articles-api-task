@@ -10,12 +10,11 @@ function Search({ onSearch }) {
     const [publishedAtFrom, setPublishedAtFrom] = useState('');
     const [publishedAtTo, setPublishedAtTo] = useState('');
 
-    // Fetch available sources from the backend
     useEffect(() => {
         const fetchSources = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/articles/source');
-                setSources(response.data.source); // Use the "source" key
+                setSources(response.data.source);
             } catch (error) {
                 console.error('Error fetching sources:', error);
             }

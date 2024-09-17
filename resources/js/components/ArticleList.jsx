@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchArticles } from '../api/articles'; // Import the fetchArticles function
 
 function ArticleList({ searchCriteria }) {
     const [articles, setArticles] = useState([]);
@@ -10,19 +10,15 @@ function ArticleList({ searchCriteria }) {
         total_pages: 1,
     });
 
-    const fetchArticles = async (page = 1) => {
+    const loadArticles = async (page = 1) => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8000/api/articles', {
-                params: { ...searchCriteria, page },
-            });
+            const data = await fetchArticles(page, searchCriteria);
 
-            const { data, pagination: pagData } = response.data;
-
-            setArticles(data);
+            setArticles(data.data);
             setPagination({
-                current_page: pagData.current_page || 1,
-                total_pages: Math.ceil(pagData.total / (pagData.per_page || 10)),
+                current_page: data.pagination.current_page,
+                total_pages: Math.ceil(data.pagination.total / data.pagination.per_page),
             });
         } catch (err) {
             setError('Failed to fetch articles');
@@ -32,12 +28,12 @@ function ArticleList({ searchCriteria }) {
     };
 
     useEffect(() => {
-        fetchArticles();
+        loadArticles();
     }, [searchCriteria]);
 
     const handlePageChange = (page) => {
         if (page > 0 && page <= pagination.total_pages) {
-            fetchArticles(page);
+            loadArticles(page);
         }
     };
 
