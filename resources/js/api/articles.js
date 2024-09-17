@@ -7,7 +7,6 @@ export const fetchArticles = async () => {
         const response = await axios.get(API_URL);
         return response.data;
     } catch (error) {
-        console.error('Error fetching articles:', error);
         throw error;
     }
 };

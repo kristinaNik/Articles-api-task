@@ -10,10 +10,8 @@ function ArticleList() {
         const getArticles = async () => {
             try {
                 const articles = await fetchArticles();
-                console.log('Articles:', articles); // Debugging line to check data
-                setArticles(articles); // Set articles to state
+                setArticles(articles);
             } catch (error) {
-                console.error('Error fetching articles:', error);
                 setError('Failed to fetch articles');
             } finally {
                 setLoading(false);
