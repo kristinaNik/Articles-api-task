@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Mappers\ArticleMapper;
-use App\Models\Article;
+use App\Services\Interfaces\ArticleServiceInterface;
 use Illuminate\Support\Facades\Http;
 
 class NewsApiArticleService implements ArticleServiceInterface

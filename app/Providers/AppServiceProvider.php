@@ -4,15 +4,15 @@ namespace App\Providers;
 
 use App\Mappers\ArticleMapper;
 use App\Services\ArticleSearchService;
-use App\Services\ArticleSearchServiceInterface;
-use App\Services\ArticleServiceInterface;
-use App\Services\ArticleUrlExctractorInterface;
 use App\Services\ArticleUrlExtractor;
 use App\Services\GuardianArticleService;
+use App\Services\Interfaces\ArticleSearchServiceInterface;
+use App\Services\Interfaces\ArticleServiceInterface;
+use App\Services\Interfaces\ArticleUrlExctractorInterface;
+use App\Services\Interfaces\PaginationServiceInterface;
 use App\Services\NewsApiArticleService;
 use App\Services\NewYorkTimesArticleService;
 use App\Services\PaginationService;
-use App\Services\PaginationServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PaginatedArticleResource;
-use App\Services\ArticleSearchServiceInterface;
-use App\Services\ArticleUrlExctractorInterface;
-use App\Services\PaginationServiceInterface;
-use Illuminate\Http\Request;
 use App\Http\Resources\ArticleResource;
+use App\Http\Resources\PaginatedArticleResource;
 use App\Models\Article;
-use App\Services\ArticleServiceInterface;
+use App\Services\Interfaces\ArticleSearchServiceInterface;
+use App\Services\Interfaces\ArticleServiceInterface;
+use App\Services\Interfaces\ArticleUrlExctractorInterface;
+use App\Services\Interfaces\PaginationServiceInterface;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
@@ -23,9 +23,7 @@ class ArticlesController extends Controller
 		private ArticleUrlExctractorInterface $articleUrlExtractor,
 		private PaginationServiceInterface $paginationService
 	)
-	{
-
-	}
+	{}
 
 	public function index(Request $request): Response
 	{

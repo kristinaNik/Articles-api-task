@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Article;
+use App\Services\Interfaces\ArticleSearchServiceInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArticleSearchService implements ArticleSearchServiceInterface

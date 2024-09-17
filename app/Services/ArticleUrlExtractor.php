@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Services\Interfaces\ArticleUrlExctractorInterface;
+
 class ArticleUrlExtractor implements ArticleUrlExctractorInterface
 {
 	public function extractArticleUrls(array $articlesData): array

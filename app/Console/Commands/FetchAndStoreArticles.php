@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\ArticleServiceInterface;
+use App\Services\Interfaces\ArticleServiceInterface;
 use Illuminate\Console\Command;
 
 class FetchAndStoreArticles extends Command

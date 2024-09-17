@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Interfaces;
 
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ArticleSearchServiceInterface
