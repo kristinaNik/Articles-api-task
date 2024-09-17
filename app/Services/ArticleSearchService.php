@@ -31,7 +31,6 @@ class ArticleSearchService implements ArticleSearchServiceInterface
 	{
 		$query = Article::query();
 
-		// Apply filters
 		if (!empty($filters['title'])) {
 			$query->where('title', 'like', '%' . $filters['title'] . '%');
 		}
