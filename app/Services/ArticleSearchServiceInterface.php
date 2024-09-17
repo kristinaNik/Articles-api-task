@@ -7,5 +7,5 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ArticleSearchServiceInterface
 {
-	public function searchArticlesWithFilters(Request $request): LengthAwarePaginator;
+	public function searchArticlesWithFilters(array $filters): LengthAwarePaginator;
 }

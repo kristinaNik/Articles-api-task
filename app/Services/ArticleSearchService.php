@@ -10,35 +10,26 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArticleSearchService implements ArticleSearchServiceInterface
 {
-	public function searchArticlesWithFilters(Request $request): LengthAwarePaginator
+	public function searchArticlesWithFilters(array $filters): LengthAwarePaginator
 	{
 		$query = Article::query();
 
-		if ($request->filled('title')) {
-			$query->title($request->input('title'));
+		if (!empty($filters['title'])) {
+			$query->where('title', 'like', '%' . $filters['title'] . '%');
 		}
 
-		if ($request->filled('description')) {
-			$query->description($request->input('description'));
+		if (!empty($filters['author'])) {
+			$query->where('author', 'like', '%' . $filters['author'] . '%');
 		}
 
-		if ($request->filled('source')) {
-			$query->source($request->input('source'));
+		if (!empty($filters['category'])) {
+			$query->where('category', 'like', '%' . $filters['category'] . '%');
 		}
 
-		if ($request->filled('category')) {
-			$query->category($request->input('category'));
+		if (!empty($filters['source'])) {
+			$query->where('source','like', '%' . $filters['source'] . '%');
 		}
 
-		if ($request->filled('author')) {
-			$query->author($request->input('author'));
-		}
-
-		if ($request->filled('published_at')) {
-			$query->publishedAt($request->input('published_at'));
-		}
-
-		return $query->paginate($request->input('per_page', 10));
-
+		return $query->paginate(10);
 	}
 }

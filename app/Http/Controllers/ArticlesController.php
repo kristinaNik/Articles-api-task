@@ -29,8 +29,13 @@ class ArticlesController extends Controller
 
 	public function index(Request $request): Response
 	{
-		if ($request->has('title') || $request->has('author') || $request->has('category')) {
-			$articles = $this->articleSearchService->searchArticlesWithFilters($request);
+		$filters = $request->only(['title', 'author', 'category', 'source']);
+
+		// Determine if filters are applied
+		$hasFilters = !empty(array_filter($filters));
+
+		if ($hasFilters) {
+			$articles = $this->articleSearchService->searchArticlesWithFilters($filters);
 		} else {
 			$articles = Article::paginate(10);
 		}
@@ -38,7 +43,7 @@ class ArticlesController extends Controller
 		$pagination = $this->paginationService->generatePaginationData($articles);
 
 		return response(new PaginatedArticleResource([
-			'data' => $articles,
+			'data' => $hasFilters ? $articles : $articles->items(),
 			'pagination' => $pagination,
 		]), 200);
 	}
