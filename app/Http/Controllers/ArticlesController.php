@@ -11,7 +11,6 @@ use App\Models\Article;
 use App\Services\Interfaces\ArticleSearchServiceInterface;
 use App\Services\Interfaces\ArticleServiceInterface;
 use App\Services\Interfaces\ArticleUrlExctractorInterface;
-use App\Services\Interfaces\PaginationServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -23,7 +22,6 @@ class ArticlesController extends Controller
 		private ArticleServiceInterface $articleService,
 		private ArticleSearchServiceInterface $articleSearchService,
 		private ArticleUrlExctractorInterface $articleUrlExtractor,
-		private PaginationServiceInterface $paginationService
 	)
 	{}
 
@@ -31,32 +29,14 @@ class ArticlesController extends Controller
 	{
 		$filters = $request->only(['title', 'author', 'category', 'source', 'published_at_from', 'published_at_to']);
 
-		$hasFilters = !empty(array_filter($filters));
+		$result = $this->articleSearchService->getArticlesByFilters($filters);
 
-		if ($hasFilters) {
-			$articles = $this->articleSearchService->searchArticlesWithFilters($filters);
-		} else {
-			$articles = Article::paginate(10);
-		}
-
-		$pagination = $hasFilters
-			? $this->paginationService->generatePaginationData($articles)
-			: [
-				'current_page' => $articles->currentPage(),
-				'per_page' => $articles->perPage(),
-				'total' => $articles->total(),
-			];
-
-		return response(new PaginatedArticleResource([
-			'data' => $hasFilters ? $articles : $articles->items(),
-			'pagination' => $pagination,
-		]), 200);
+		return response(new PaginatedArticleResource($result), 200);
 	}
 
 	public function getSources(): Response
 	{
 		$sources = DB::table('articles')->distinct()->pluck('source');
-
 		return response(new ArticleSourceResource($sources), 200);
 	}
 
@@ -77,13 +57,9 @@ class ArticlesController extends Controller
 	{
 		try {
 			$articlesData = $this->articleService->fetchArticles();
-
 			$this->articleService->storeArticles($articlesData);
 
-			// Fetch the newly stored articles from the database using their URLs
 			$storedArticleUrls = $this->articleUrlExtractor->extractArticleUrls($articlesData);
-
-			// Retrieve stored articles from the database based on the URLs
 			$storedArticles = Article::whereIn('url', $storedArticleUrls)->get();
 
 			return response([

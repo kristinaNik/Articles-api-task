@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
 		$this->app->singleton(ArticleSearchServiceInterface::class, function () {
-			return new ArticleSearchService();
+			return new ArticleSearchService(new PaginationService());
 		});
 
 		$this->app->singleton(ArticleUrlExctractorInterface::class, function () {
