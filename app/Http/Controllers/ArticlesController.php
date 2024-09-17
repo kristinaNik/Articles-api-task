@@ -40,7 +40,14 @@ class ArticlesController extends Controller
 			$articles = Article::paginate(10);
 		}
 
-		$pagination = $this->paginationService->generatePaginationData($articles);
+		// Prepare pagination data
+		$pagination = $hasFilters
+			? $this->paginationService->generatePaginationData($articles)
+			: [
+				'current_page' => $articles->currentPage(),
+				'per_page' => $articles->perPage(),
+				'total' => $articles->total(),
+			];
 
 		return response(new PaginatedArticleResource([
 			'data' => $hasFilters ? $articles : $articles->items(),

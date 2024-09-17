@@ -1,12 +1,4 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:8000/api/articles';
-
-export const fetchArticles = async () => {
-    try {
-        const response = await axios.get(API_URL);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+export const fetchArticles = async (page = 1) => {
+    const response = await fetch(`http://localhost:8000/api/articles?page=${page}`);
+    return await response.json();
 };
